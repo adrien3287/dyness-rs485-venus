@@ -16,9 +16,21 @@ Sauvegarde et projet de réinstallation de la supervision **Dyness PowerHaus** p
 
 ### État du projet
 
-Le dépôt vient d'être initialisé. **Les fichiers réellement exécutés sur le Raspberry Pi ne sont pas encore importés.** Ils doivent être exportés depuis cette machine avant de pouvoir annoncer une sauvegarde complète et écrire un installateur reproductible. Le script d'export est fourni dans [tools/export-from-venus.sh](tools/export-from-venus.sh).
+**La sauvegarde réelle a été reçue, inspectée et conditionnée** le 10 octobre 2026 : 289 fichiers opérationnels et dépendances, plus scripts de réinstallation. Cependant, **les fichiers restent à importer dans ce dépôt** : tant que `snapshot/`, `scripts/` et `MANIFEST.sha256` ne sont pas sur `main`, le dépôt GitHub n'est PAS encore une sauvegarde complète. L'archive préparée est disponible dans le chat ChatGPT comme `dyness-rs485-venus-source.zip`.
 
-## Exporter l'installation actuelle
+## Importer la sauvegarde préparée sur GitHub
+
+Sur Windows, télécharger dans la conversation ChatGPT le fichier `dyness-rs485-venus-source.zip`. Une fois Git pour Windows installé et l'accès GitHub configuré, lancer :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\import-source.ps1 -ZipPath .\dyness-rs485-venus-source.zip
+```
+
+Le script [tools/import-source.ps1](tools/import-source.ps1) doit être téléchargé depuis GitHub ou exécuté dans un clone de ce dépôt. Il clone le dépôt dans `%TEMP%`, vérifie les fichiers indispensables, demande confirmation avant toute publication, puis effectue `git push origin main`. Comme le dépôt est public, vérifier son contenu avant de confirmer.
+
+Un workflow [Validate Dyness Venus OS backup](.github/workflows/validate.yml) vérifie les empreintes SHA256, les modules Python et les manifestes GUI lors de l'import.
+
+## Exporter l'installation actuelle (facultatif — déjà reçu)
 
 Sur le Venus OS **source**, exécuter :
 
@@ -33,9 +45,9 @@ L'export récupère les fichiers spécifiques du pilote, du parseur, de l'agrég
 
 ## Réinstallation sur un autre Venus OS
 
-**À documenter après l'import de la sauvegarde réelle** : version de `dbus-serialbattery` épinglée, câblage CAN/RS485, configuration UART, installation des fichiers, intégration avec les services existants, activation GUI et contrôles de non-régression.
+Le paquet préparé contient des scripts d'installation (`scripts/install.sh`), d'activation (`scripts/activate.sh`), de vérification (`scripts/check.sh`) et de configuration du démarrage (`scripts/install-boot-hook.sh`). Ils seront disponibles sur GitHub après l'import. Ils n'écrasent pas automatiquement `/u-boot/config.txt`, `/etc/inittab` ou `/data/rc.local`.
 
-Pour l'instant **ne pas utiliser ce dépôt comme installateur complet**.
+**Ne pas utiliser le dépôt comme installateur complet tant que ces fichiers n'ont pas été importés et vérifiés.**
 
 ## Périmètre et limites
 
