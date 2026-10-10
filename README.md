@@ -28,6 +28,22 @@ L'archive brute fournie à ChatGPT comprenait également des **caches `__pycache
 - Boot Raspberry Pi de référence : `enable_uart=1`, `dtoverlay=miniuart-bt` et overlay MCP2515 ; console `ttyAMA0` désactivée dans `/etc/inittab` ; `/u-boot/cmdline.txt` sans console série.
 - Les valeurs physiques des tensions cellule 16 sont reconstruites depuis la tension du pack et 15 valeurs cellule : **l'index réel de la cellule absente reste à vérifier**.
 
+## Choisir le port série RS485
+
+Le port est paramétrable **à l'installation** (par défaut `/dev/ttyAMA0`, comme sur le Raspberry Pi d'origine).
+
+```sh
+sh scripts/install.sh --port /dev/ttyUSB0
+# ou, pour reproduire exactement la configuration d'origine :
+sh scripts/install.sh --port /dev/ttyAMA0
+```
+
+L'installateur génère `/data/apps/dyness_powerhaus_v0_2/serial-port.conf`, configure les noms D-Bus de l'agrégateur pour les deux adresses `0x02` et `0x03`, et installe un script de démarrage qui crée le service runit `dbus-serialbattery.<nom-du-port>`. Le port sélectionné est également utilisé par `scripts/activate.sh` et `scripts/check.sh`. Ports pris en charge : `ttyUSBn`, `ttyACMn`, `ttyAMAn` et `ttySn` (numéros décimaux). Pour les adaptateurs USB, vérifier la numérotation après redémarrage.
+
+**Changer le port après activation :** arrêter et retirer proprement l'ancien service runit avant de lancer `sh scripts/configure-port.sh /dev/ttyUSB1`, puis `sh scripts/activate.sh`. Ne pas effectuer ce changement sur un système opérationnel sans plan de retour arrière : les services déjà enregistrés sont volontairement protégés.
+
+La branche `snapshot/` demeure un **instantané immuable** et conserve `ttyAMA0`. Les scripts d'installation appliquent les réglages à la copie installée dans `/data/apps`. Les autres prérequis (UART, console série, CAN can8) restent à configurer sur la machine cible. Cette fonctionnalité n'a pas encore été validée sur un second appareil Venus OS.
+
 ## Installation sur un nouveau Venus OS
 
 1. Installer d'abord Venus OS compatible, le CAN MCP2515, le renommage `can8`, et confirmer le pilotage CAN **sans brancher le RS485 comme BMS de contrôle**.
@@ -36,7 +52,7 @@ L'archive brute fournie à ChatGPT comprenait également des **caches `__pycache
 4. Exécuter depuis la racine du dépôt :
 
 ```sh
-sh scripts/install.sh
+sh scripts/install.sh --port /dev/ttyAMA0
 ```
 
 L'installateur **refuse par défaut d'écraser** une installation `dbus-serialbattery` existante. Les réglages OS (`/u-boot/config.txt`, `/etc/inittab`, `/data/rc.local`) ne sont **jamais écrasés**. Les dossiers sources sont copiés et une copie de sauvegarde est faite avant toute mise à jour explicite.
