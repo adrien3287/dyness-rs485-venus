@@ -1,0 +1,40 @@
+name: Publish Dyness Venus OS snapshot
+on:
+  push:
+    paths:
+      - 'archive/dyness-rs485-venus-source.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify source package
+        shell: bash
+        run: |
+          echo "de948faccdb885a9b9e93c7683dd8653e9d4020ad157287ccd3b39b6c0b28353  archive/dyness-rs485-venus-source.zip" | sha256sum -c -
+          unzip -q archive/dyness-rs485-venus-source.zip -d .snapshot-stage
+          cd .snapshot-stage
+          sha256sum -c MANIFEST.sha256 | tail -n 3
+          test -f snapshot/data/apps/dbus-serialbattery/bms/dyness_powerhaus.py
+          test -f snapshot/data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py
+          test -f snapshot/data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py
+          test -f snapshot/data/apps/DynessDetails/DynessDetails.json
+      - name: Publish source and restore scripts
+        shell: bash
+        run: |
+          cp -a .snapshot-stage/snapshot .snapshot-stage/scripts .
+          cp -a .snapshot-stage/INVENTORY.json .snapshot-stage/MANIFEST.sha256 .
+          cp -a .snapshot-stage/README.md .
+          cp -a .snapshot-stage/.gitignore .
+          git config user.name "dyness-venus-backup[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md .gitignore INVENTORY.json MANIFEST.sha256 scripts snapshot
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified current Dyness RS485 Venus OS source snapshot"
+            git push origin HEAD:main
+          fi
