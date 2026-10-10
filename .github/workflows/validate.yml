@@ -1,0 +1,58 @@
+name: Validate Dyness Venus OS backup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check backup availability
+        id: snapshot
+        shell: bash
+        run: |
+          if [ -f MANIFEST.sha256 ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Source snapshot has not been imported yet."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Verify checksums
+        if: steps.snapshot.outputs.ready == 'true'
+        run: sha256sum -c MANIFEST.sha256
+      - name: Check Python syntax
+        if: steps.snapshot.outputs.ready == 'true'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in [
+              'snapshot/data/apps/dbus-serialbattery/bms/dyness_powerhaus.py',
+              'snapshot/data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py',
+              'snapshot/data/apps/dbus-serialbattery/dbushelper.py',
+              'snapshot/data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py'
+          ]:
+              compile(Path(name).read_bytes(), name, 'exec')
+              print("OK", name)
+          PY
+      - name: Validate GUI manifests
+        if: steps.snapshot.outputs.ready == 'true'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, json
+          for name in [
+              'snapshot/data/apps/DynessDetails/DynessDetails.json',
+              'snapshot/data/apps/available/SerialbatteryGui/gui-v2/SerialbatteryGui.json',
+          ]:
+              d=json.loads(Path(name).read_text())
+              r=base64.b64decode(d['resource'],validate=True)
+              assert r[:4]==b'qres',name
+              print('OK',name,d['name'])
+          PY
+      - name: Check install scripts
+        if: steps.snapshot.outputs.ready == 'true'
+        run: |
+          for f in scripts/*.sh; do sh -n "$f" || exit; done
