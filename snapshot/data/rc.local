@@ -1,0 +1,5 @@
+#!/bin/bash
+
+/data/dbus-shelly-3em-smartmeter/install.sh
+( bash /data/apps/dbus-serialbattery/enable.sh > /data/apps/dbus-serialbattery/startup.log 2>&1; bash /data/apps/dyness_powerhaus_v0_2/startup.sh > /data/apps/dyness_powerhaus_v0_2/startup.log 2>&1 ) &
+bash /data/apps/dbus-serialbattery/enable.sh > /data/apps/dbus-serialbattery/startup.log 2>&1 &

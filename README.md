@@ -1,60 +1,86 @@
-# Dyness PowerHaus RS485 → Victron Venus OS
+# Dyness PowerHaus RS485 → Venus OS
 
-Sauvegarde et projet de réinstallation de la supervision **Dyness PowerHaus** pour Victron Venus OS.
+**Sauvegarde source du lecteur Dyness PowerHaus fonctionnel, issue du Raspberry Pi le 10 octobre 2026.**
 
-## Configuration de référence (10 octobre 2026)
+Ce dépôt regroupe les fichiers exécutés sur un Raspberry Pi 3B+ sous **Venus OS v3.80~39**, pour deux modules **Dyness PowerHaus 5.12 kWh**, adresses RS485 `0x02` (master) et `0x03` (slave).
 
-- Venus OS `v3.80~39`, Raspberry Pi 3B+.
-- Deux batteries Dyness PowerHaus 5,12 kWh : module **02** (Master) et **03** (Slave).
-- CAN `can8` (500 kbit/s) : **BMS principal**, gestion DVCC et sécurité Victron.
-- RS485 `/dev/ttyAMA0` (9600, 8N1) : **supervision en lecture seule**, via `dbus-serialbattery`.
-- Services distincts `com.victronenergy.battery.ttyAMA0__0x02` et `...__0x03`.
-- Agrégateur d'observation `com.victronenergy.battery.dynesspowerhausbank`, instance 40.
-- Pages Venus OS GUI v2 : plugin officiel `dbus-serialbattery` et plugin personnalisé `DynessDetails v5`.
+> **Sécurité : RS485 = supervision uniquement.** Le **CAN `can8` reste le BMS de contrôle** du système Victron/DVCC. Ne jamais sélectionner les batteries RS485 ni l'agrégateur comme BMS de contrôle. Les limites RS485 de contrôle restent volontairement à zéro et ne représentent **pas** les autorisations réelles du BMS.
 
-**Important :** le pilotage CAN doit rester prioritaire. Ne pas utiliser les valeurs de courant 0 A du service RS485 comme limites BMS réelles : elles sont neutralisées intentionnellement pour éviter de prendre le contrôle DVCC.
+## Contenu
 
-### État du projet
+| Répertoire | Contenu |
+|---|---|
+| `snapshot/data/apps/dbus-serialbattery/` | Installation Python d'origine, dépendances locales, driver `bms/dyness_powerhaus.py`, parser `bms/dyness_powerhaus_protocol.py`, `config.ini`, modifications `dbushelper.py` |
+| `snapshot/data/apps/dyness_powerhaus_v0_2/` | Agrégateur (`aggregate_dbus.py`), calcul TimeToGo (`energy.py`), services runit et `startup.sh` |
+| `snapshot/data/apps/DynessDetails/` | Plugin GUI v2 personnalisé **v5**, avec diagnostics de charge/décharge et états MOSFET |
+| `snapshot/data/apps/available/SerialbatteryGui/gui-v2/` | Plugin officiel précompilé, renommé en `SerialbatteryGui.json` pour FlashMQ |
+| `snapshot/data/rc.local`, `snapshot/u-boot/`, `snapshot/etc/inittab` | **Références de configuration** seulement : ne pas écraser les fichiers OS sur une autre machine |
+| `scripts/` | Préparation, activation contrôlée, diagnostics et création d'un hook de démarrage optionnel |
+| `MANIFEST.sha256` | Empreintes des fichiers extraits de l'archive d'origine |
 
-**La sauvegarde réelle a été reçue, inspectée et conditionnée** le 10 octobre 2026 : 289 fichiers opérationnels et dépendances, plus scripts de réinstallation. Cependant, **les fichiers restent à importer dans ce dépôt** : tant que `snapshot/`, `scripts/` et `MANIFEST.sha256` ne sont pas sur `main`, le dépôt GitHub n'est PAS encore une sauvegarde complète. L'archive préparée est disponible dans le chat ChatGPT comme `dyness-rs485-venus-source.zip`.
+L'archive brute fournie à ChatGPT comprenait également des **caches `__pycache__`, journaux runtime, anciens backups, état `supervise` et anciennes distributions WebAssembly (~43 Mo)**. Ils ne sont pas nécessaires pour réinstaller et sont exclus de ce dépôt source. Voir `INVENTORY.json`. Les fichiers fonctionnels et les dépendances Python incluses ont été conservés sans modification.
 
-## Importer la sauvegarde préparée sur GitHub
+## Architecture et câblage
 
-Sur Windows, télécharger dans la conversation ChatGPT le fichier `dyness-rs485-venus-source.zip`. Une fois Git pour Windows installé et l'accès GitHub configuré, lancer :
+- Raspberry Pi 3B+, Waveshare CAN/RS485 HAT Rev2.1.
+- **CAN:** contrôleur MCP2515 renommé `can8` au niveau de l'OS, 500 kbit/s. Le CAN contrôle réellement la charge et la décharge via Victron. **Le renommage `can0`→`can8` et la configuration CAN ne sont pas sauvegardés intégralement dans cette archive : reconstruire et vérifier sur la machine cible.**
+- **RS485:** `/dev/ttyAMA0`, `9600 8N1`, adresses `0x02` et `0x03`.
+- Boot Raspberry Pi de référence : `enable_uart=1`, `dtoverlay=miniuart-bt` et overlay MCP2515 ; console `ttyAMA0` désactivée dans `/etc/inittab` ; `/u-boot/cmdline.txt` sans console série.
+- Les valeurs physiques des tensions cellule 16 sont reconstruites depuis la tension du pack et 15 valeurs cellule : **l'index réel de la cellule absente reste à vérifier**.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\import-source.ps1 -ZipPath .\dyness-rs485-venus-source.zip
-```
+## Installation sur un nouveau Venus OS
 
-Le script [tools/import-source.ps1](tools/import-source.ps1) doit être téléchargé depuis GitHub ou exécuté dans un clone de ce dépôt. Il clone le dépôt dans `%TEMP%`, vérifie les fichiers indispensables, demande confirmation avant toute publication, puis effectue `git push origin main`. Comme le dépôt est public, vérifier son contenu avant de confirmer.
-
-Un workflow [Validate Dyness Venus OS backup](.github/workflows/validate.yml) vérifie les empreintes SHA256, les modules Python et les manifestes GUI lors de l'import.
-
-## Exporter l'installation actuelle (facultatif — déjà reçu)
-
-Sur le Venus OS **source**, exécuter :
+1. Installer d'abord Venus OS compatible, le CAN MCP2515, le renommage `can8`, et confirmer le pilotage CAN **sans brancher le RS485 comme BMS de contrôle**.
+2. Activer physiquement l'UART RS485 sur `/dev/ttyAMA0`, désactiver la console série sur ce port, vérifier le câblage A/B, 9600 8N1.
+3. Copier ce dépôt entier sur le Raspberry Pi, par exemple dans `/data/dyness-rs485-venus/` (via `scp` ou `git clone`).
+4. Exécuter depuis la racine du dépôt :
 
 ```sh
-wget -O /data/export-dyness.sh https://raw.githubusercontent.com/adrien3287/dyness-rs485-venus/main/tools/export-from-venus.sh
-sh /data/export-dyness.sh
+sh scripts/install.sh
 ```
 
-Le script affiche le chemin de l'archive `/data/dyness-venus-export-*.tar.gz`. Transférer cette archive pour analyse/import ; ne pas publier directement sans la vérifier.
+L'installateur **refuse par défaut d'écraser** une installation `dbus-serialbattery` existante. Les réglages OS (`/u-boot/config.txt`, `/etc/inittab`, `/data/rc.local`) ne sont **jamais écrasés**. Les dossiers sources sont copiés et une copie de sauvegarde est faite avant toute mise à jour explicite.
 
-L'export récupère les fichiers spécifiques du pilote, du parseur, de l'agrégateur, des services et des interfaces graphiques. Les paramètres dont le nom évoque un secret sont masqués dans `config.ini`. Les journaux et clés privées sont exclus.
+5. Vérifier la configuration et le fonctionnement côté CAN. Ensuite, seulement après cette vérification :
 
-## Réinstallation sur un autre Venus OS
+```sh
+sh scripts/activate.sh
+```
 
-Le paquet préparé contient des scripts d'installation (`scripts/install.sh`), d'activation (`scripts/activate.sh`), de vérification (`scripts/check.sh`) et de configuration du démarrage (`scripts/install-boot-hook.sh`). Ils seront disponibles sur GitHub après l'import. Ils n'écrasent pas automatiquement `/u-boot/config.txt`, `/etc/inittab` ou `/data/rc.local`.
+Cela enregistre les services runit du RS485 et de l'agrégateur et active les plugins GUI. Cela **n'installe pas de hook de démarrage** automatiquement. Après validation d'un démarrage/arrêt manuel, installer le hook optionnel :
 
-**Ne pas utiliser le dépôt comme installateur complet tant que ces fichiers n'ont pas été importés et vérifiés.**
+```sh
+sh scripts/install-boot-hook.sh
+```
 
-## Périmètre et limites
+**Attention au système source :** `snapshot/data/rc.local` présente deux lancements distincts de `enable.sh`, probablement une duplication accidentelle. **Ne jamais recopier ce fichier de référence tel quel.** Le nouveau hook crée une seule séquence. Il préserve les autres commandes `rc.local` et sauvegarde l'original.
 
-Les chemins `/Diagnostics/BmsChargeAllowed`, `/Diagnostics/BmsDischargeAllowed`, `/Diagnostics/BmsChargeMosOn` et leurs homologues proviennent des trames BMS. Le balancing réel n'est pas encore décodé : `/Balancing=0` et `/Balances/CellN=0` ne prouvent pas que l'équilibrage soit inactif.
+## Vérification après installation
 
-Ce travail contient une intégration expérimentale : toute migration doit être testée sans perdre le contrôle CAN et les protections matérielles du fabricant.
+```sh
+sh scripts/check.sh
+```
 
-## Licences
+Règles attendues : les deux services RS485 affichent leurs SOC, autorisations BMS réelles dans `/Diagnostics/BmsChargeAllowed` et `/Diagnostics/BmsDischargeAllowed`; l'agrégateur `com.victronenergy.battery.dynesspowerhausbank` est connecté ; **le contrôle reste au CAN** (`com.victronenergy.battery.socketcan_can8`).
 
-`dbus-serialbattery`, Venus OS et les éventuelles ressources tierces appartiennent à leurs auteurs respectifs. La provenance et les licences seront documentées au moment de l'import des fichiers exacts.
+GUI v2 (console distante) : `Settings` → `Devices` → `PowerHaus RS485 02/03` → **Dyness - Etat BMS reel (RS485)**. Le plugin officiel ajoute également ses pages à chaque batterie. FlashMQ exige que le **fichier JSON porte le nom du dossier applicatif** (`SerialbatteryGui/SerialbatteryGui.json`).
+
+## Ce qui n'est PAS résolu
+
+- `Balancing` réel et état par cellule **non décodés** : `/Balancing=0` et `/Balances/Cell*=0` peuvent être des valeurs par défaut, non une mesure.
+- Décodage exhaustif des alarmes propriétaires, du dernier octet statut `0x44`, et stabilité prolongée de l'agrégateur : à valider.
+- Les chemins `Io/AllowToCharge` / `Io/AllowToDischarge` des services RS485 sont neutralisés **volontairement**. Les valeurs utiles se trouvent sous `/Diagnostics/`.
+
+## Maintenance / licence
+
+Code tiers provenant de [mr-manuel/venus-os_dbus-serialbattery](https://github.com/mr-manuel/venus-os_dbus-serialbattery), avec fichiers de licence upstream conservés. Ce dépôt est une capture personnalisée, non une publication officielle Victron/Dyness. Vérifier les licences de chaque bibliothèque tierce et conserver leurs notices. Ne pas publier de logs contenant des informations privées ni de secrets dans `config.ini`.
+
+## Retour arrière
+
+```sh
+sh snapshot/data/apps/DynessDetails/disable.sh
+svc -d /service/dbus-dynesspowerhaus-bank
+svc -d /service/dbus-serialbattery.ttyAMA0
+```
+
+Ne pas supprimer le pilote CAN ni modifier DVCC pour effectuer ce retour arrière.

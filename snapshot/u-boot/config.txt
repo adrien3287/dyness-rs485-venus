@@ -1,0 +1,34 @@
+kernel=u-boot.bin
+
+[pi2]
+device_tree=bcm2709-rpi-2-b.dtb
+
+[pi3]
+device_tree=bcm2710-rpi-3-b.dtb
+dtoverlay=miniuart-bt
+core_freq=400
+core_freq_min=400
+
+[pi3+]
+device_tree=bcm2710-rpi-3-b-plus.dtb
+dtoverlay=miniuart-bt
+core_freq=400
+core_freq_min=400
+
+[pi02]
+device_tree=bcm2710-rpi-zero-2-w.dtb
+dtoverlay=miniuart-bt,krnbt=on
+core_freq=400
+core_freq_min=400
+
+[all]
+dtparam=spi=on
+#### begin CAN overlay
+# Waveshare 1-channel CANbus Hat 12 MHz crystal
+# instantiates as can0 ONLY !!!
+# use udev rules to rename
+[all]
+dtparam=spi=on
+dtoverlay=mcp2515-can0,oscillator=12000000,interrupt=25,spimaxfrequency=2000000
+#### end CAN overlay
+enable_uart=1

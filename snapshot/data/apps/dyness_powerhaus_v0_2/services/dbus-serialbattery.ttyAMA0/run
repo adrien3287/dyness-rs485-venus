@@ -1,0 +1,3 @@
+#!/bin/sh
+exec >> /data/apps/dyness_powerhaus_v0_2/rs485-debug.log 2>&1
+exec bash /data/apps/dbus-serialbattery/start-serialbattery.sh ttyAMA0

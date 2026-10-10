@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+cd /data/apps/dyness_powerhaus_v0_2
+exec python3 -u aggregate_dbus.py

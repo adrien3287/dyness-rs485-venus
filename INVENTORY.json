@@ -1,0 +1,297 @@
+{
+  "source_file": "dyness-rs485-venus-backup.tar.gz",
+  "source_sha256": "4100248c87f127778a7966a40fae660ebaeaced32f99bae5d8599db5be4111cf",
+  "snapshot_date": "2026-10-10",
+  "included_files": 289,
+  "included_uncompressed_bytes": 4052506,
+  "excluded_files": [
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py.before_status3_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py.before_dyness_v03",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py.before_status80",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/jkbms.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/dyness_powerhaus_protocol.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/eg4_lifepower.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/felicity.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/lltjbd.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/dyness_powerhaus.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/renogy.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/daly.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/hlpdatabms4s.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/seplosv3.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/jkbms_pb.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/pace.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/heltecmodbus.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/eg4_ll.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/daren_485.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/seplos.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/ks48100.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/__pycache__/ecs.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py.bak44",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus.py.before_dyness_v03",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/bms/dyness_powerhaus_protocol.py.before_status28_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/dbushelper.py.before_dyness_diag",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/config.ini.dyness-v02-20261008-193632",
+      "reason": "old configuration backup"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/dbushelper.py.before_dyness_v03",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/dbushelper.py.before_global_soh",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/startup.log",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/__pycache__/utils.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/__pycache__/battery.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/__pycache__/dbushelper.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/config.ini.bak.dyness",
+      "reason": "old configuration backup"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/dbus-serialbattery.py.dyness-backup",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/velib_python/__pycache__/settingsdevice.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/velib_python/__pycache__/ve_utils.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/velib_python/__pycache__/vedbus.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/.temp/bleak-v1.0.1.tar.gz",
+      "reason": "temporary upstream archives"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/.temp/python-can-v4.5.0.tar.gz",
+      "reason": "temporary upstream archives"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/.temp/aenum-3.1.16.tar.gz",
+      "reason": "temporary upstream archives"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/.temp/velib_python-master.tar.gz",
+      "reason": "temporary upstream archives"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/__pycache__/minimalmodbus.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/venus-webassembly.zip",
+      "reason": "WebAssembly GUI distribution not needed for plugin,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/venus-gui-v2.wasm.sha256",
+      "reason": "upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/README.md",
+      "reason": "upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/install-new-webgui.sh",
+      "reason": "upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.6x/venus-webassembly.zip",
+      "reason": "obsolete WebAssembly archive,WebAssembly GUI distribution not needed for plugin,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.6x/venus-gui-v2-version.txt",
+      "reason": "obsolete WebAssembly archive,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.6x/venus-gui-v2.wasm.sha256",
+      "reason": "obsolete WebAssembly archive,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.5x/venus-webassembly.zip",
+      "reason": "obsolete WebAssembly archive,WebAssembly GUI distribution not needed for plugin,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.5x/venus-gui-v2-version.txt",
+      "reason": "obsolete WebAssembly archive,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dbus-serialbattery/ext/venus-os_dbus-serialbattery_gui-v2/archive/venus-os_v3.5x/venus-gui-v2.wasm.sha256",
+      "reason": "obsolete WebAssembly archive,upstream WebAssembly application not needed"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.bak",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/bms/dyness_powerhaus.py",
+      "reason": "obsolete duplicate experimental driver"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/bms/dyness_powerhaus_protocol.py",
+      "reason": "obsolete duplicate experimental driver"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/bms/__pycache__/dyness_powerhaus_protocol.cpython-313.pyc",
+      "reason": "compiled Python cache,obsolete duplicate experimental driver"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/bms/__pycache__/dyness_powerhaus.cpython-313.pyc",
+      "reason": "compiled Python cache,obsolete duplicate experimental driver"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/services/dbus-serialbattery.ttyAMA0/run.bak",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/services/dbus-serialbattery.ttyAMA0/supervise/status",
+      "reason": "runtime supervisor state"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/services/dbus-serialbattery.ttyAMA0/supervise/lock",
+      "reason": "runtime supervisor state"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/services/dbus-dynesspowerhaus-bank/supervise/status",
+      "reason": "runtime supervisor state"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/services/dbus-dynesspowerhaus-bank/supervise/lock",
+      "reason": "runtime supervisor state"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/startup.log",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.before_alarm_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/__pycache__/aggregate_dbus.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/__pycache__/energy.cpython-312.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.before_poll_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.before_connected_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/tests/__pycache__/test_energy.cpython-313.pyc",
+      "reason": "compiled Python cache"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.before_capacity_fix",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/aggregate_dbus.py.before_soh",
+      "reason": "old backup or log"
+    },
+    {
+      "path": "data/apps/dyness_powerhaus_v0_2/rs485-debug.log",
+      "reason": "old backup or log"
+    }
+  ]
+}
